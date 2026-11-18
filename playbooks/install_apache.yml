@@ -1,0 +1,35 @@
+
+---
+- name: Install Apache and deploy website
+  hosts: webservers
+  become: true
+
+  vars:
+    web_package: apache2
+    web_service: apache2
+    website_source: index.html
+    website_destination: /var/www/html/index.html
+
+  tasks:
+    - name: Update package cache
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Install Apache
+      ansible.builtin.apt:
+        name: "{{ web_package }}"
+        state: present
+
+    - name: Copy website to webserver
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../files/{{ website_source }}"
+        dest: "{{ website_destination }}"
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Start and enable Apache
+      ansible.builtin.service:
+        name: "{{ web_service }}"
+        state: started
+        enabled: true

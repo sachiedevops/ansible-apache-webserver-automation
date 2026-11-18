@@ -1,0 +1,11 @@
+# Private SSH keys
+*.pem
+*.key
+id_ed25519
+
+# Real server inventory
+inventory/hosts.ini
+
+# Temporary files
+*.retry
+*.log
